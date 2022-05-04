@@ -1,0 +1,103 @@
+﻿@model IEnumerable<AssistantApp.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<style>
+.Done{
+    background-color:green;
+}
+
+.NDone {
+    background-color:yellow;
+}
+.ui-state-holiday .ui-state-default {
+    color: red;
+}
+</style>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    <div class="col-6">
+        <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Discribtion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr  class=" @(item.IsDone? "Done" : "NDone")">
+            <td>
+                @Html.DisplayFor(modelItem => item.Discribtion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDone)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+    </div>
+     <div class="col-6">
+         <div id="datepicker"></div>
+
+    </div>
+    
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js" integrity="sha256-6XMVI0zB8cRzfZjqKcD01PBsAy3FlDASrlC8SxCpInY=" crossorigin="anonymous"></script>
+<script>
+    var holidays= [];
+
+</script> 
+@foreach (var item in Model)
+    {
+       <script type="text/javascript">
+ holidays.push(@item.Date.ToShortDateString());
+   </script>
+    }
+
+<script>
+$(document).ready(function() {
+
+    console.log(holidays)
+
+$("#datepicker").datepicker({ beforeShowDay: highLight });
+
+function highLight(date) {
+        for (var i = 0; i < holidays.length; i++) {
+            if (new Date(holidays[i]).toString() == date.toString()) {
+                return [true, 'ui-state-holiday'];
+            }
+        }
+        return [true];
+    }
+   
+
+   
+
+  
+
+});
+</script>
